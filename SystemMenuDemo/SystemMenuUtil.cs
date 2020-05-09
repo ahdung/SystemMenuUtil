@@ -173,7 +173,7 @@ namespace AhDung.WinForm
         public static void RemoveItem(IntPtr hMenu, SystemMenuStandardItem item) => RemoveItem(hMenu, (int)item, false);
 
         /// <summary>
-        /// 删除菜单项。对于展开项，本方法并不会连带销毁子菜单
+        /// 删除菜单项。对于展开项，本方法并不会连带销毁子菜单。项不存在不会抛异常
         /// </summary>
         /// <exception cref="Win32Exception" />
         public static void RemoveItem(IntPtr hMenu, int item, bool byPosition)
@@ -345,7 +345,7 @@ namespace AhDung.WinForm
             var newInfo = new SystemMenuItemInfo
             {
                 Checked = (info.fState & 8) == 8,
-                Enabled = (info.fState & 3) != 3,
+                Enabled = (info.fState & 3) == 0, //这个fState并不像文档说的禁用是3，也可能是1，猜测1=GRAYED,2=DISABLED，总之1~3都表示禁用
                 Id = info.wID,
                 SubMenuHandle = info.hSubMenu,
                 Type = (SystemMenuItemType)info.fType,

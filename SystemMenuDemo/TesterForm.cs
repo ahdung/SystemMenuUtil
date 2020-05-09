@@ -96,11 +96,6 @@ namespace SystemMenuDemo
 
         static string FormatItemInfo(SystemMenuItemInfo info)
         {
-            if (info == null)
-            {
-                return "项不存在！";
-            }
-
             return $@"Id: {info.Id}
 Text: {info.Text}
 Type: {info.Type}
@@ -113,7 +108,7 @@ SubMenuHandle: {info.SubMenuHandle}";
 
         void WriteItemInfo(SystemMenuItemInfo info)
         {
-            WriteMessage(FormatItemInfo(info));
+            WriteMessage(info == null ? "项不存在！" : FormatItemInfo(info));
         }
 
         public void WriteMessage(string message)
@@ -167,6 +162,12 @@ SubMenuHandle: {info.SubMenuHandle}";
             var item = DetermineItem(out var byPosition);
 
             var info = SystemMenuUtil.GetItemInfo(HMenu, item, byPosition);
+            if (info == null)
+            {
+                WriteMessage("项不存在！");
+                return;
+            }
+
             SystemMenuUtil.SetItemChecked(HMenu, item, byPosition, !info.Checked);
 
             WriteMessage($"项已{(info.Checked ? "取消" : "")}勾选");
@@ -177,6 +178,12 @@ SubMenuHandle: {info.SubMenuHandle}";
             var item = DetermineItem(out var byPosition);
 
             var info = SystemMenuUtil.GetItemInfo(HMenu, item, byPosition);
+            if (info == null)
+            {
+                WriteMessage("项不存在！");
+                return;
+            }
+
             SystemMenuUtil.SetItemEnabled(HMenu, item, byPosition, !info.Enabled);
 
             WriteMessage($"项已{(info.Enabled ? "禁用" : "启用")}");
